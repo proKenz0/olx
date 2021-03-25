@@ -34,12 +34,16 @@ public class App
             List<String> names = TokenService.getRefreshTokens(NAMES_FILE_PATH);
             List<Runnable> services = new ArrayList<>();
             for (int i = 0; i < refreshTokens.size(); ++i) {
+                if (names.get(i).equals("Opera")) {
+                    services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
+                            new MessagesService(new TokenService(refreshTokens.get(i)), true), names.get(i)));
+                    continue;
+                }
                 services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
-                        new MessagesService(new TokenService(refreshTokens.get(i))),names.get(i)));
+                        new MessagesService(new TokenService(refreshTokens.get(i))), names.get(i)));
                 System.out.println(i);
             }
 
-//
             for (Runnable servise : services){
                 Thread thread = new Thread(servise);
                 thread.start();

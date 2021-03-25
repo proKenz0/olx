@@ -28,9 +28,19 @@ public class MessagesService implements IMessagesService {
 
     public MessagesService(ITokenService tokenService) {
         this.standartMessage = "text=Доброго дня.\n" +
+                "Є в наявності.\n" +
                 "Ціна - 90 грн.\n" +
                 "Самовивозу немає.\n" +
                 "Доставка новою поштою або олх.\n" +
+                "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
+
+        this.commandRead = "command=mark-as-read";
+        this.tokenService = tokenService;
+    }
+    public MessagesService(ITokenService tokenService, boolean isMeet) {
+        this.standartMessage = "text=Доброго дня.\n" +
+                "Є в наявності.\n" +
+                "Ціна - 90 грн.\n" +
                 "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
 
         this.commandRead = "command=mark-as-read";
