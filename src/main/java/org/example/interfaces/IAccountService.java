@@ -2,6 +2,8 @@ package org.example.interfaces;
 
 import org.example.models.OlxThread;
 
+import java.io.IOException;
+
 public interface IAccountService {
     void printAllMessages();
 
@@ -9,7 +11,7 @@ public interface IAccountService {
 
     void printUnreadMessages();
 
-    void giveStandartAnswers();
+    void giveStandartAnswers() throws Exception;
 
 
 }

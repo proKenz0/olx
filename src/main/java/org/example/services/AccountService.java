@@ -1,8 +1,10 @@
 package org.example.services;
 
+import org.example.App;
 import org.example.interfaces.*;
 import org.example.models.Message;
 import org.example.models.OlxThread;
+import org.example.operations.Sound;
 
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -10,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketTimeoutException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class AccountService implements IAccountService, Runnable {
@@ -18,6 +21,8 @@ public class AccountService implements IAccountService, Runnable {
     private IMessagesService messagesService;
     private IOutputService outputService;
     private String name;
+    private final String hasUnreadMessageSound = "src/main/resources/lyalya.wav";
+    private final String sendMessageSound = "src/main/resources/Papich.wav";
 
     private Map<OlxThread, List<Message>> threadMessage = new HashMap<>();
 
@@ -119,7 +124,7 @@ public class AccountService implements IAccountService, Runnable {
 
     //Sends standart answers to all unread threads (users)
     @Override
-    public void giveStandartAnswers() {
+    public void giveStandartAnswers() throws Exception {
         try {
             refresh();
             String result = "";
@@ -129,18 +134,19 @@ public class AccountService implements IAccountService, Runnable {
                 }
                 if (messagesService.isSendMessage(thread.getId())) {
 
-                    result += "Has send messages\n";
+                    result += "Has unread message\n";
+                    Sound.playSound(hasUnreadMessageSound);
                     continue;
                 }
                 messagesService.sendStandartMessage(thread.getId());
-                result += "Message was send\n";
+                Sound.playSound(sendMessageSound).setVolume(1);
+                result += "Message was send to client\n";
             }
             outputService.displayInRaw(result);
         } catch (IOException e){
-            outputService.display(e.getMessage());
-            e.printStackTrace();
+            throw new IOException(e.getMessage() + "\n" + name);
         } catch (Exception e) {
-            outputService.display(e.getMessage());
+            throw new Exception(e.getMessage() + "\n" + name);
         }
     }
 
@@ -156,8 +162,12 @@ public class AccountService implements IAccountService, Runnable {
                     giveStandartAnswers();
                     Thread.currentThread().sleep(5000);
                 } catch (InterruptedException e) {
-                    System.out.println("IOException in run");
+                   outputService.display("IOException in run");
+                   e.printStackTrace();
+                } catch (Exception e) {
+                    outputService.display(e.getMessage());
+                    e.printStackTrace();
                 }
-            }
+        }
     }
 }
