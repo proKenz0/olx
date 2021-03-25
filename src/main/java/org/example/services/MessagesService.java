@@ -30,6 +30,7 @@ public class MessagesService implements IMessagesService {
         this.standartMessage = "text=Доброго дня.\n" +
                 "Є в наявності.\n" +
                 "Ціна - 90 грн.\n" +
+                "Скло 5д чорне/біле - 70 грн.\n" +
                 "Самовивозу немає.\n" +
                 "Доставка новою поштою або олх.\n" +
                 "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
@@ -41,6 +42,7 @@ public class MessagesService implements IMessagesService {
         this.standartMessage = "text=Доброго дня.\n" +
                 "Є в наявності.\n" +
                 "Ціна - 90 грн.\n" +
+                "Скло 5д чорне/біле - 70 грн.\n" +
                 "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
 
         this.commandRead = "command=mark-as-read";
@@ -55,7 +57,6 @@ public class MessagesService implements IMessagesService {
             }).getData();
         } catch (JsonProcessingException e) {
             throw e;
-//            throw new IOException("JsonProcessingException in getMessageList");
         } catch (IOException e) {
             throw new IOException("Exception in getMessageList");
         }
@@ -76,8 +77,8 @@ public class MessagesService implements IMessagesService {
     @Override
     public void sendStandartMessage(String threadId) throws Exception {
         try {
-            HttpReq.postRequest(getCommandUrl(threadId), commandRead, tokenService.getHeaders());
             HttpReq.postRequest(getMessagesUrl(threadId), standartMessage, tokenService.getHeaders());
+            HttpReq.postRequest(getCommandUrl(threadId), commandRead, tokenService.getHeaders());
         } catch (IOException e) {
             throw new IOException("IOException in sendStandartMessage");
         }

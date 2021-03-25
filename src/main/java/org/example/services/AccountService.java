@@ -32,27 +32,6 @@ public class AccountService implements IAccountService, Runnable {
         this.messagesService = messagesService;
         this.outputService = outputService;
         this.name = name;
-
-//        refresh();
-    }
-
-    public AccountService(IOlxThreadsService threadsService, IMessagesService messagesService,
-                          String name) throws Exception {
-        this.threadsService = threadsService;
-        this.messagesService = messagesService;
-        this.name = name;
-        this.outputService = new IOutputService() {
-            @Override
-            public void display(String message) {
-                System.out.println(message);
-            }
-
-            @Override
-            public void displayInRaw(String message) {
-                System.out.print(message);
-            }
-        };
-//        refresh();
     }
 
     //Refresh messages in map
@@ -135,11 +114,11 @@ public class AccountService implements IAccountService, Runnable {
                 if (messagesService.isSendMessage(thread.getId())) {
 
                     result += "Has unread message\n";
-                    Sound.playSound(hasUnreadMessageSound);
+                    Sound.playSound(hasUnreadMessageSound).setVolume(0.65f);
                     continue;
                 }
                 messagesService.sendStandartMessage(thread.getId());
-                Sound.playSound(sendMessageSound).setVolume(1);
+                Sound.playSound(sendMessageSound).setVolume(0.8f);
                 result += "Message was send to client\n";
             }
             outputService.displayInRaw(result);
@@ -160,7 +139,7 @@ public class AccountService implements IAccountService, Runnable {
         while (true) {
                 try {
                     giveStandartAnswers();
-                    Thread.currentThread().sleep(5000);
+                    Thread.currentThread().sleep(10000);
                 } catch (InterruptedException e) {
                    outputService.display("IOException in run");
                    e.printStackTrace();
