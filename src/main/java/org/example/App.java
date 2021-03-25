@@ -50,7 +50,7 @@ public class App
             for (int i = 0; i < refreshTokens.size(); ++i) {
 
                 services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
-                        new MessagesService(new TokenService(refreshTokens.get(0))),names.get(i)));
+                        new MessagesService(new TokenService(refreshTokens.get(i))),names.get(i)));
                 System.out.println(i);
             }
 

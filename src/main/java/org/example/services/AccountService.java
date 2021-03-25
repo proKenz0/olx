@@ -41,6 +41,11 @@ public class AccountService implements IAccountService, Runnable {
             public void display(String message) {
                 System.out.println(message);
             }
+
+            @Override
+            public void displayInRaw(String message) {
+                System.out.print(message);
+            }
         };
 //        refresh();
     }
@@ -117,19 +122,20 @@ public class AccountService implements IAccountService, Runnable {
     public void giveStandartAnswers() {
         try {
             refresh();
-            String result = name + ": \n";
+            String result = "";
             for (OlxThread thread : threadsService.getUnreadThreads()) {
+                if (result.isEmpty()) {
+                    result ="\n" + name + ": \n";
+                }
                 if (messagesService.isSendMessage(thread.getId())) {
 
                     result += "Has send messages\n";
-//                    outputService.display("Has send messages");
                     continue;
                 }
                 messagesService.sendStandartMessage(thread.getId());
                 result += "Message was send\n";
-//                outputService.display("Message was send");
             }
-            outputService.display(result);
+            outputService.displayInRaw(result);
         } catch (IOException e){
             outputService.display(e.getMessage());
             e.printStackTrace();
@@ -140,7 +146,6 @@ public class AccountService implements IAccountService, Runnable {
 
     @Override
     public void run() {
-
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
@@ -148,9 +153,7 @@ public class AccountService implements IAccountService, Runnable {
         }
         while (true) {
                 try {
-                    outputService.display("");
                     giveStandartAnswers();
-                    outputService.display("");
                     Thread.currentThread().sleep(5000);
                 } catch (InterruptedException e) {
                     System.out.println("IOException in run");
