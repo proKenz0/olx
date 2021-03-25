@@ -1,0 +1,10 @@
+Opera
+Chrome
+Chronium
+Mozilla
+Vivaldi
+ComodoDragon
+Edge
+IceDragon
+SlimJet
+Maxthon
