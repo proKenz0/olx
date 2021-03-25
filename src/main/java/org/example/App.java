@@ -29,21 +29,7 @@ public class App
 
     public static void main( String[] args ) {
 
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-
         try {
-//            List<String> refreshTokens = TokenService.getRefreshTokens(REFRESH_TOKENS_FILE_PATH);
-//            List<String> names = TokenService.getRefreshTokens(NAMES_FILE_PATH);
-//            List<Runnable> services = new ArrayList<>();
-//
-//            services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(9))),
-//                        new MessagesService(new TokenService(refreshTokens.get(9))),names.get(9)));
-//                System.out.println(9);
-//
-//            for (Runnable servise : services){
-//                Thread thread = new Thread(servise);
-//                thread.start();
-//            }
             List<String> refreshTokens = TokenService.getRefreshTokens(REFRESH_TOKENS_FILE_PATH);
             List<String> names = TokenService.getRefreshTokens(NAMES_FILE_PATH);
             List<Runnable> services = new ArrayList<>();
@@ -69,7 +55,5 @@ public class App
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
-        System.out.println("buy");
     }
 }
