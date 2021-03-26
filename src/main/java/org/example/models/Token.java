@@ -1,4 +1,4 @@
-package org.example.olx_config;
+package org.example.models;
 
 public class Token {
     private String access_token;

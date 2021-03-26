@@ -1,21 +1,16 @@
 package org.example.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.interfaces.ITokenService;
 import org.example.olx_config.AppData;
-import org.example.olx_config.Token;
-import org.example.olx_config.UrlAdress;
+import org.example.models.Token;
 import org.example.operations.JsonParser;
 import org.example.requests.HttpReq;
 
-import javax.lang.model.type.NullType;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class TokenService implements ITokenService {
     private static AppData appData = new AppData();
@@ -24,7 +19,7 @@ public class TokenService implements ITokenService {
 
     public TokenService(String refreshToken) throws IOException {
         initializeToken(refreshToken);
-    }
+   }
 
     private void initializeToken(String refreshToken) throws IOException {
         try {
