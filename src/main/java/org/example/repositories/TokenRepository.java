@@ -28,8 +28,6 @@ public class TokenRepository implements ITokenRepository {
         return instance;
     }
 
-
-
     @Override
     public Token getToken(String refreshToken) throws IOException {
         try {
