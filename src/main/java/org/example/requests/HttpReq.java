@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
@@ -65,9 +63,23 @@ public class HttpReq {
 //    }
     public static String getRequest(String uri, Map<String, String> headers) throws IOException {
 
-        URL url = new URL(uri);
-        HttpURLConnection connection = (HttpURLConnection)  url.openConnection();
-        connection.setRequestMethod("GET");
+        URL url = null;
+        try {
+            url = new URL(uri);
+        } catch (MalformedURLException e) {
+            throw new MalformedURLException("MalformedURLException in get");
+        }
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection)  url.openConnection();
+        } catch (IOException e) {
+            throw new IOException("IOException in openConnection int get");
+        }
+        try {
+            connection.setRequestMethod("GET");
+        } catch (ProtocolException e) {
+            throw new ProtocolException("ProtocolException in setRequestMethod in get");
+        }
         connection.setReadTimeout(3000);
         connection.setConnectTimeout(3000);
 
@@ -81,11 +93,20 @@ public class HttpReq {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder response = new StringBuilder();
 
-        while ((line = bufferedReader.readLine()) != null) {
+        while (true) {
+            try {
+                if (!((line = bufferedReader.readLine()) != null)) break;
+            } catch (IOException e) {
+                throw new IOException("IOException in readLine in get");
+            }
             response.append(line);
         }
 
-        bufferedReader.close();
+        try {
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new IOException("IOException in close in get");
+        }
 
         return response.toString();
     }
@@ -93,9 +114,24 @@ public class HttpReq {
 
         String postData = args;
 
-        URL url = new URL(uri);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
+        URL url = null;
+        try {
+            url = new URL(uri);
+        } catch (MalformedURLException e) {
+            throw new MalformedURLException("MalformedURLException in post");
+        }
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            throw new IOException("IOException in post connection");
+        }
+
+        try {
+            connection.setRequestMethod("POST");
+        } catch (ProtocolException e) {
+            throw new ProtocolException("ProtocolException in post");
+        }
         connection.setDoOutput(true);
         connection.setReadTimeout(3000);
         connection.setConnectTimeout(3000);
@@ -106,21 +142,47 @@ public class HttpReq {
         }
 
         //Adding post data
-        OutputStream outputStream = connection.getOutputStream();
-        outputStream.write(postData.getBytes());
-        outputStream.flush();
-        outputStream.close();
+        OutputStream outputStream = null;
+        try {
+            outputStream = connection.getOutputStream();
+        } catch (IOException e) {
+            throw new IOException("IOException in connection.getOutputStream()");
+        }
+        try {
+            outputStream.write(postData.getBytes());
+        } catch (IOException e) {
+            throw new IOException("IOException in outputStream.write()");
+        }
+        try {
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new IOException("IOException in outputStream.flush()");
+        }
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            throw new IOException("IOException in outputStream.close()");
+        }
 
         String line = "";
 
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         StringBuilder response = new StringBuilder();
 
-        while ((line = bufferedReader.readLine()) != null) {
+        while (true) {
+            try {
+                if (!((line = bufferedReader.readLine()) != null)) break;
+            } catch (IOException e) {
+                throw new IOException("IOException in bufferedReader.readLine()");
+            }
             response.append(line);
         }
 
-        bufferedReader.close();
+        try {
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new IOException("IOException in bufferedReader.close()");
+        }
 
         return response.toString();
     }

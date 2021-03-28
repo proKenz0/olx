@@ -33,9 +33,9 @@ public class OlxThreadsService implements IOlxThreadsService {
             threads = JsonParser.parseJson(response, new TypeReference<DataWrapper<OlxThread>>() {
             }).getData();
         } catch (JsonProcessingException e) {
-            throw new IOException("JsonProcessingException in getThreadList");
+            throw new IOException(e.getMessage() + "\nJsonProcessingException in getThreadList");
         } catch (IOException e) {
-            throw new IOException("IOException in getThreadList");
+            throw new IOException(e.getMessage() + "\nIOException in getThreadList");
         }
         return threads;
     }

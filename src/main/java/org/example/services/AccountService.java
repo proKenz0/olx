@@ -141,11 +141,16 @@ public class AccountService implements IAccountService, Runnable {
                     giveStandartAnswers();
                     Thread.currentThread().sleep(10000);
                 } catch (InterruptedException e) {
-                   outputService.display("IOException in run");
+                   outputService.display("IOException in run\n" + e.getMessage());
                    e.printStackTrace();
                 } catch (Exception e) {
                     outputService.display(e.getMessage());
                     e.printStackTrace();
+                    try {
+                        Thread.currentThread().sleep(10000);
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
                 }
         }
     }

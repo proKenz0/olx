@@ -58,7 +58,7 @@ public class MessagesService implements IMessagesService {
         } catch (JsonProcessingException e) {
             throw e;
         } catch (IOException e) {
-            throw new IOException("Exception in getMessageList");
+            throw new IOException(e.getMessage() + "\nException in getMessageList");
         }
     }
     @Override
@@ -68,9 +68,9 @@ public class MessagesService implements IMessagesService {
             return JsonParser.parseJson(response, new TypeReference<DataWrapper<Message>>() {
             }).getData().stream().filter(x->x.isIs_read()==false).collect(Collectors.toList());
         } catch (JsonProcessingException e) {
-            throw new IOException("JsonProcessingException in getUnreadMessageList");
+            throw new IOException(e.getMessage() + "\nJsonProcessingException in getUnreadMessageList");
         } catch (IOException e) {
-            throw new IOException("IOException in getUnreadMessageList");
+            throw new IOException(e.getMessage() + " \nIOException in getUnreadMessageList");
         }
     }
 
@@ -80,7 +80,7 @@ public class MessagesService implements IMessagesService {
             HttpReq.postRequest(getMessagesUrl(threadId), standartMessage, tokenService.getHeaders());
             HttpReq.postRequest(getCommandUrl(threadId), commandRead, tokenService.getHeaders());
         } catch (IOException e) {
-            throw new IOException("IOException in sendStandartMessage");
+            throw new IOException(e.getMessage() + "\nIOException in sendStandartMessage");
         }
     }
 

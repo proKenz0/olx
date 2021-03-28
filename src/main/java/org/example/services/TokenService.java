@@ -27,7 +27,7 @@ public class TokenService implements ITokenService {
                     new HashMap<>());
             token = JsonParser.parseJson(response, new TypeReference<Token>() {});
         } catch (IOException e) {
-            throw new IOException("Exception in initializeToken");
+            throw new IOException(e.getMessage() +"\nException in initializeToken");
         }
     }
 
