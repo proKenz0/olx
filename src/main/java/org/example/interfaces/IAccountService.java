@@ -5,13 +5,13 @@ import org.example.models.OlxThread;
 import java.io.IOException;
 
 public interface IAccountService {
-    void printAllMessages();
+//    void printAllMessages();
+//
+//    void printUnreadThreadsMessages();
+//
+//    void printUnreadMessages();
 
-    void printUnreadThreadsMessages();
-
-    void printUnreadMessages();
-
-    void giveStandartAnswers() throws Exception;
+//    void giveStandartAnswers() throws Exception;
 
 
 }

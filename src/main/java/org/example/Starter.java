@@ -15,6 +15,18 @@ public class Starter {
 
     private static final String REFRESH_TOKENS_FILE_PATH = "src/main/resources/refreshTokens.txt";
     private static final String NAMES_FILE_PATH = "src/main/resources/names.txt";
+    private final String STANDART_MESSAGE = "text=Доброго дня.\n" +
+            "Є в наявності.\n" +
+            "Ціна - 90 грн.\n" +
+            "Скло 5д чорне/біле - 70 грн.\n" +
+            "Самовивозу немає.\n" +
+            "Доставка новою поштою або олх.\n" +
+            "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
+    private final String LVIV_STANDART_MESSAGE = "text=Доброго дня.\n" +
+            "Є в наявності.\n" +
+            "Ціна - 90 грн.\n" +
+            "Скло 5д чорне/біле - 70 грн.\n" +
+            "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
 
     private IOutputService outputService;
 
@@ -30,14 +42,14 @@ public class Starter {
             for (int i = 0; i < refreshTokens.size(); ++i) {
                 outputService.display(String.valueOf(i));
                 if (names.get(i).equals("Opera")) {
-                    services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
-                            new MessagesService(new TokenService(refreshTokens.get(i)), true),
-                            outputService, names.get(i)));
+                    services.add(new AccountService(new OlxThreadsService(),
+                            new MessagesService(), outputService, new TokenService(refreshTokens.get(i)),
+                            names.get(i),LVIV_STANDART_MESSAGE));
                     continue;
                 }
-                services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
-                        new MessagesService(new TokenService(refreshTokens.get(i))),
-                        outputService, names.get(i)));
+                services.add(new AccountService(new OlxThreadsService(),
+                        new MessagesService(), outputService, new TokenService(refreshTokens.get(i)),
+                        names.get(i),STANDART_MESSAGE));
             }
 
             for (Runnable servise : services){

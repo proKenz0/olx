@@ -21,7 +21,7 @@ public class TokenService implements ITokenService {
         initializeToken(refreshToken);
    }
 
-    private void initializeToken(String refreshToken) throws IOException {
+    public void initializeToken(String refreshToken) throws IOException {
         try {
             String response = HttpReq.postRequest(TOKEN_URL, getRefreshTokenArgs(refreshToken),
                     new HashMap<>());
@@ -41,7 +41,11 @@ public class TokenService implements ITokenService {
         return headers;
     }
 
-//    private String getRefreshTokenArgs(String refreshToken) throws JsonProcessingException {
+    public Token getToken() {
+        return token;
+    }
+
+    //    private String getRefreshTokenArgs(String refreshToken) throws JsonProcessingException {
 //
 //        ObjectMapper mapper = new ObjectMapper();
 //
