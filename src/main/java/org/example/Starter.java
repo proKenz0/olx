@@ -49,16 +49,16 @@ public class Starter {
                 outputService.display(String.valueOf(i));
 
                 if (names.get(i).equals("Opera")) {
-                    services.add(new AccountService(new OlxThreadsService(new OlxThreadsRepository()),
-                            new MessagesService(new MessageRepository()), outputService,
-                            new TokenService(new TokenRepository(),
+                    services.add(new AccountService(OlxThreadsService.getInstance(OlxThreadsRepository.getInstance()),
+                            MessagesService.getInstance(MessageRepository.getInstance()), outputService,
+                            new TokenService(TokenRepository.getInstance(),
                             refreshTokens.get(i)), names.get(i), LVIV_STANDART_MESSAGE));
                     continue;
                 }
 
-                services.add(new AccountService(new OlxThreadsService(new OlxThreadsRepository()),
-                        new MessagesService(new MessageRepository()), outputService,
-                        new TokenService(new TokenRepository(),
+                services.add(new AccountService(OlxThreadsService.getInstance(OlxThreadsRepository.getInstance()),
+                        MessagesService.getInstance(MessageRepository.getInstance()), outputService,
+                        new TokenService(TokenRepository.getInstance(),
                                 refreshTokens.get(i)), names.get(i), STANDART_MESSAGE));
             }
 

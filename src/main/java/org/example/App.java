@@ -12,7 +12,7 @@ public class App
 
     public static void main( String[] args ) {
 
-        Starter starter = new Starter(new OutputService());
+        Starter starter = new Starter(OutputService.getInstance());
         starter.start();
 
     }

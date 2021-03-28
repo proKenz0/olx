@@ -16,6 +16,16 @@ public class OlxThreadsRepository implements IOlxThreadsRepository {
 
     private final String THREADS_URL = "https://www.olx.ua/api/partner/threads";
 
+    private static OlxThreadsRepository instance;
+
+    private OlxThreadsRepository(){}
+
+    public static OlxThreadsRepository getInstance(){
+        if(instance == null)
+            instance = new OlxThreadsRepository();
+        return instance;
+    }
+
     @Override
     public List<OlxThread> getThreadList(Map<String, String> headers) throws Exception {
         try {
