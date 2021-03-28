@@ -73,6 +73,7 @@ public class Starter {
         } catch (IOException e) {
             outputService.display(e.getMessage());
             e.printStackTrace();
+            start();
         } catch (Exception e){
             outputService.display(e.getMessage());
             e.printStackTrace();
