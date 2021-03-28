@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 public class MessagesService implements IMessagesService {
 
-    private String standartMessage;
     private String commandRead;
     private ITokenService tokenService;
     private static final String MESSAGES_START = "https://www.olx.ua/api/partner/threads/";
@@ -27,23 +26,6 @@ public class MessagesService implements IMessagesService {
     private static final String THREAD_COMMAND_END = "/commands";
 
     public MessagesService(ITokenService tokenService) {
-        this.standartMessage = "text=Доброго дня.\n" +
-                "Є в наявності.\n" +
-                "Ціна - 90 грн.\n" +
-                "Скло 5д чорне/біле - 70 грн.\n" +
-                "Самовивозу немає.\n" +
-                "Доставка новою поштою або олх.\n" +
-                "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
-
-        this.commandRead = "command=mark-as-read";
-        this.tokenService = tokenService;
-    }
-    public MessagesService(ITokenService tokenService, boolean isMeet) {
-        this.standartMessage = "text=Доброго дня.\n" +
-                "Є в наявності.\n" +
-                "Ціна - 90 грн.\n" +
-                "Скло 5д чорне/біле - 70 грн.\n" +
-                "Залишіть номер вайберу, пришлемо фото чохлів на вашу модель.";
 
         this.commandRead = "command=mark-as-read";
         this.tokenService = tokenService;
@@ -75,9 +57,9 @@ public class MessagesService implements IMessagesService {
     }
 
     @Override
-    public void sendStandartMessage(String threadId) throws Exception {
+    public void sendMessage(String threadId, String message) throws Exception {
         try {
-            HttpReq.postRequest(getMessagesUrl(threadId), standartMessage, tokenService.getHeaders());
+            HttpReq.postRequest(getMessagesUrl(threadId), message, tokenService.getHeaders());
             HttpReq.postRequest(getCommandUrl(threadId), commandRead, tokenService.getHeaders());
         } catch (IOException e) {
             throw new IOException(e.getMessage() + "\nIOException in sendStandartMessage");

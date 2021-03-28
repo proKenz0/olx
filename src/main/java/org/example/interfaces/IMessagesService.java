@@ -9,6 +9,6 @@ import java.util.List;
 public interface IMessagesService {
     List<Message> getMessageList(String threadId) throws Exception;
     List<Message> getUnreadMessageList(String threadId) throws Exception;
-    void sendStandartMessage(String threadId) throws Exception;
+    void sendMessage(String threadId, String message) throws Exception;
     boolean isSendMessage(String threadId) throws Exception;
 }
