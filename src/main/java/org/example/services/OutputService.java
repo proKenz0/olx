@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.interfaces.IOutputService;
+import org.example.interfaces.service.IOutputService;
 
 public class OutputService implements IOutputService {
     @Override

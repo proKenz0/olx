@@ -1,4 +1,4 @@
-package org.example.interfaces;
+package org.example.interfaces.service;
 
 import org.example.models.Message;
 import org.example.models.OlxThread;

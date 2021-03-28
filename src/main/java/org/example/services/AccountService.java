@@ -1,18 +1,12 @@
 package org.example.services;
 
-import org.example.App;
-import org.example.interfaces.*;
-import org.example.models.Message;
+import org.example.interfaces.service.*;
 import org.example.models.OlxThread;
 import org.example.operations.Sound;
 
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.net.SocketTimeoutException;
-import java.net.URISyntaxException;
 import java.util.*;
 
 public class AccountService implements IAccountService, Runnable {
@@ -43,25 +37,6 @@ public class AccountService implements IAccountService, Runnable {
         if (tokenService.getToken().getExpires_in() == 0){
             tokenService.initializeToken(tokenService.getToken().getRefresh_token());
         }
-    }
-
-    public static List<String> getNames(String path) throws FileNotFoundException {
-        File file = new File(path);
-
-        Scanner scanner = null;
-
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("FileNotFoundException in getNames");
-        }
-
-        List<String> names = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            names.add(scanner.nextLine());
-        }
-
-        return names;
     }
 
     //Sends standart answers to all unread threads (users)
