@@ -42,14 +42,14 @@ public class Starter {
             for (int i = 0; i < refreshTokens.size(); ++i) {
                 outputService.display(String.valueOf(i));
                 if (names.get(i).equals("Opera")) {
-                    services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
-                            new MessagesService(new TokenService(refreshTokens.get(i))),
-                            outputService, names.get(i),LVIV_STANDART_MESSAGE));
+                    services.add(new AccountService(new OlxThreadsService(),
+                            new MessagesService(), outputService, new TokenService(refreshTokens.get(i)),
+                            names.get(i),LVIV_STANDART_MESSAGE));
                     continue;
                 }
-                services.add(new AccountService(new OlxThreadsService(new TokenService(refreshTokens.get(i))),
-                        new MessagesService(new TokenService(refreshTokens.get(i))),
-                        outputService, names.get(i),STANDART_MESSAGE));
+                services.add(new AccountService(new OlxThreadsService(),
+                        new MessagesService(), outputService, new TokenService(refreshTokens.get(i)),
+                        names.get(i),STANDART_MESSAGE));
             }
 
             for (Runnable servise : services){

@@ -5,10 +5,11 @@ import org.example.models.OlxThread;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface IMessagesService {
-    List<Message> getMessageList(String threadId) throws Exception;
-    List<Message> getUnreadMessageList(String threadId) throws Exception;
-    void sendMessage(String threadId, String message) throws Exception;
-    boolean isSendMessage(String threadId) throws Exception;
+    List<Message> getMessageList(String threadId, Map<String, String> headers) throws Exception;
+    List<Message> getUnreadMessageList(String threadId, Map<String, String> headers) throws Exception;
+    void sendMessage(String threadId, String message, Map<String, String> headers) throws Exception;
+    boolean isSendMessage(String threadId, Map<String, String> headers) throws Exception;
 }

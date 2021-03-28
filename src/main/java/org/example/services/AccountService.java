@@ -20,27 +20,28 @@ public class AccountService implements IAccountService, Runnable {
     private IOlxThreadsService threadsService;
     private IMessagesService messagesService;
     private IOutputService outputService;
+    private ITokenService tokenService;
     private String name;
     private final String hasUnreadMessageSound = "src/main/resources/lyalya.wav";
     private final String sendMessageSound = "src/main/resources/Papich.wav";
     private String standartMessage;
 
 
-    private Map<OlxThread, List<Message>> threadMessage = new HashMap<>();
-
     public AccountService(IOlxThreadsService threadsService, IMessagesService messagesService,
-                          IOutputService outputService, String name, String standartMessage) throws Exception {
+                          IOutputService outputService,ITokenService tokenService, String name, String standartMessage) throws Exception {
         this.threadsService = threadsService;
         this.messagesService = messagesService;
         this.outputService = outputService;
+        this.tokenService = tokenService;
         this.name = name;
         this.standartMessage = standartMessage;
     }
 
     //Refresh messages in map
-    private void refresh() throws Exception {
-        for (OlxThread thread : threadsService.getThreadList()){
-            threadMessage.put(thread, messagesService.getMessageList(thread.getId()));
+    private void refreshToken() throws Exception {
+
+        if (tokenService.getToken().getExpires_in() == 0){
+            tokenService.initializeToken(tokenService.getToken().getRefresh_token());
         }
     }
 
@@ -67,19 +68,19 @@ public class AccountService implements IAccountService, Runnable {
 
     private void giveStandartAnswers() throws Exception {
         try {
-            refresh();
+            refreshToken();
             String result = "";
-            for (OlxThread thread : threadsService.getUnreadThreads()) {
+            for (OlxThread thread : threadsService.getUnreadThreads(tokenService.getHeaders())) {
                 if (result.isEmpty()) {
                     result ="\n" + name + ": \n";
                 }
-                if (messagesService.isSendMessage(thread.getId())) {
+                if (messagesService.isSendMessage(thread.getId(),tokenService.getHeaders())) {
 
                     result += "Has unread message\n";
                     Sound.playSound(hasUnreadMessageSound).setVolume(0.65f);
                     continue;
                 }
-                messagesService.sendMessage(thread.getId(), standartMessage);
+                messagesService.sendMessage(thread.getId(), standartMessage, tokenService.getHeaders());
                 Sound.playSound(sendMessageSound).setVolume(0.8f);
                 result += "Message was send to client\n";
             }
