@@ -1,6 +1,11 @@
 package org.example;
 
-import org.example.interfaces.IOutputService;
+import org.example.interfaces.repositories.ITokenRepository;
+import org.example.interfaces.service.IAccountService;
+import org.example.interfaces.service.IOutputService;
+import org.example.repositories.MessageRepository;
+import org.example.repositories.OlxThreadsRepository;
+import org.example.repositories.TokenRepository;
 import org.example.services.AccountService;
 import org.example.services.MessagesService;
 import org.example.services.OlxThreadsService;
@@ -36,20 +41,25 @@ public class Starter {
 
     public void start(){
         try {
-            List<String> refreshTokens = TokenService.getRefreshTokens(REFRESH_TOKENS_FILE_PATH);
-            List<String> names = TokenService.getRefreshTokens(NAMES_FILE_PATH);
+            List<String> refreshTokens = ITokenRepository.getRefreshTokens(REFRESH_TOKENS_FILE_PATH);
+            List<String> names = IAccountService.getNames(NAMES_FILE_PATH);
             List<Runnable> services = new ArrayList<>();
+
             for (int i = 0; i < refreshTokens.size(); ++i) {
                 outputService.display(String.valueOf(i));
+
                 if (names.get(i).equals("Opera")) {
-                    services.add(new AccountService(new OlxThreadsService(),
-                            new MessagesService(), outputService, new TokenService(refreshTokens.get(i)),
-                            names.get(i),LVIV_STANDART_MESSAGE));
+                    services.add(new AccountService(new OlxThreadsService(new OlxThreadsRepository()),
+                            new MessagesService(new MessageRepository()), outputService,
+                            new TokenService(new TokenRepository(),
+                            refreshTokens.get(i)), names.get(i), LVIV_STANDART_MESSAGE));
                     continue;
                 }
-                services.add(new AccountService(new OlxThreadsService(),
-                        new MessagesService(), outputService, new TokenService(refreshTokens.get(i)),
-                        names.get(i),STANDART_MESSAGE));
+
+                services.add(new AccountService(new OlxThreadsService(new OlxThreadsRepository()),
+                        new MessagesService(new MessageRepository()), outputService,
+                        new TokenService(new TokenRepository(),
+                                refreshTokens.get(i)), names.get(i), STANDART_MESSAGE));
             }
 
             for (Runnable servise : services){

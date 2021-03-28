@@ -1,8 +1,8 @@
 package org.example.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.example.interfaces.ITokenService;
-import org.example.olx_config.AppData;
+import org.example.interfaces.repositories.ITokenRepository;
+import org.example.interfaces.service.ITokenService;
 import org.example.models.Token;
 import org.example.operations.JsonParser;
 import org.example.requests.HttpReq;
@@ -13,27 +13,27 @@ import java.io.IOException;
 import java.util.*;
 
 public class TokenService implements ITokenService {
-    private static AppData appData = new AppData();
+
     private Token token;
-    private final String TOKEN_URL  = "https://www.olx.ua/api/open/oauth/token";
+    private ITokenRepository tokenRepository;
 
-    public TokenService(String refreshToken) throws IOException {
+    public TokenService(ITokenRepository tokenRepository, String refreshToken) throws IOException {
+        this.tokenRepository = tokenRepository;
         initializeToken(refreshToken);
-   }
+    }
 
+    @Override
     public void initializeToken(String refreshToken) throws IOException {
         try {
-            String response = HttpReq.postRequest(TOKEN_URL, getRefreshTokenArgs(refreshToken),
-                    new HashMap<>());
-            token = JsonParser.parseJson(response, new TypeReference<Token>() {});
+            token = tokenRepository.getToken(refreshToken);
         } catch (IOException e) {
-            throw new IOException(e.getMessage() +"\nException in initializeToken");
+            throw new IOException(e.getMessage() + "\nException in TokenService in initializeToken");
         }
     }
 
     @Override
     public Map<String, String> getHeaders() throws Exception {
-        if(token == null)
+        if (token == null)
             throw new Exception("Token = null");
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", "Bearer " + token.getAccess_token());
@@ -41,11 +41,13 @@ public class TokenService implements ITokenService {
         return headers;
     }
 
+    @Override
     public Token getToken() {
         return token;
     }
 
-    //    private String getRefreshTokenArgs(String refreshToken) throws JsonProcessingException {
+}
+//    private String getRefreshTokenArgs(String refreshToken) throws JsonProcessingException {
 //
 //        ObjectMapper mapper = new ObjectMapper();
 //
@@ -59,34 +61,7 @@ public class TokenService implements ITokenService {
 //        System.out.println(str);
 //        return str;
 //    }
-    private String getRefreshTokenArgs(String refreshToken){
 
-        return "grant_type=refresh_token" +
-                "&refresh_token=" + refreshToken +
-                "&client_id=" + appData.getClient_id() +
-                "&client_secret=" + appData.getClient_secret();
-    }
-
-    public static List<String> getRefreshTokens(String path) throws FileNotFoundException {
-        File file = new File(path);
-
-        Scanner scanner = null;
-
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("FileNotFoundException in getRefreshTOkens");
-        }
-
-        List<String> refreshTokens = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            refreshTokens.add(scanner.nextLine());
-        }
-
-        return refreshTokens;
-    }
-
-}
 //    private static String getTokenArgs(){
 //
 //        return "grant_type=authorization_code" +
