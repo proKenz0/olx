@@ -20,6 +20,7 @@ public class TokenService implements ITokenService {
     public TokenService(ITokenRepository tokenRepository, String refreshToken) throws IOException {
         this.tokenRepository = tokenRepository;
         initializeToken(refreshToken);
+        System.out.println(token);
     }
 
     @Override
