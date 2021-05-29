@@ -34,8 +34,8 @@ public class AccountService implements IAccountService, Runnable {
     //Refresh messages in map
     private void refreshToken() throws Exception {
 
-        if (tokenService.getToken().getExpires_in() == 0){
-            tokenService.initializeToken(tokenService.getToken().getRefresh_token());
+        if (tokenService.getToken().getExpires_in() <= 0){
+//     2       tokenService.initializeToken(tokenService.getToken().getRefresh_token());
         }
     }
 
@@ -77,7 +77,7 @@ public class AccountService implements IAccountService, Runnable {
         while (true) {
                 try {
                     giveStandartAnswers();
-                    Thread.currentThread().sleep(10000);
+                    Thread.currentThread().sleep(30000);
                 } catch (InterruptedException e) {
                    outputService.display("IOException in run\n" + e.getMessage());
                    e.printStackTrace();

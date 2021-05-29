@@ -10,10 +10,17 @@ import java.util.stream.Collectors;
 
 public class OlxThreadsService implements IOlxThreadsService {
 
-    IOlxThreadsRepository olxThreadsRepository;
+    private IOlxThreadsRepository olxThreadsRepository;
+    private static OlxThreadsService instance;
 
-    public OlxThreadsService(IOlxThreadsRepository olxThreadsRepository) {
+    private OlxThreadsService(IOlxThreadsRepository olxThreadsRepository) {
         this.olxThreadsRepository = olxThreadsRepository;
+    }
+
+    public static OlxThreadsService getInstance(IOlxThreadsRepository olxThreadsRepository){
+        if(instance == null)
+            instance = new OlxThreadsService(olxThreadsRepository);
+        return instance;
     }
 
     @Override

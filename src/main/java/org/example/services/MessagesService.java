@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.example.interfaces.repositories.IMessageRepository;
 import org.example.interfaces.service.IMessagesService;
 import org.example.models.Message;
+import org.example.olx_config.AppData;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,10 +13,17 @@ import java.util.stream.Collectors;
 
 public class MessagesService implements IMessagesService {
 
-    IMessageRepository messageRepository;
+    private IMessageRepository messageRepository;
+    private static MessagesService instance;
 
-    public MessagesService(IMessageRepository messageRepository) {
+    private MessagesService(IMessageRepository messageRepository) {
         this.messageRepository = messageRepository;
+    }
+
+    public static MessagesService getInstance(IMessageRepository messageRepository){
+        if (instance == null)
+            instance = new MessagesService(messageRepository);
+        return instance;
     }
 
     @Override
@@ -51,7 +59,8 @@ public class MessagesService implements IMessagesService {
     @Override
     public boolean isSendMessage(String threadId, Map<String, String> headers) throws Exception {
         try {
-            return messageRepository.getMessageList(threadId, headers).stream().anyMatch(x -> x.getType().equals("sent"));
+            return messageRepository.getMessageList(threadId, headers).stream().anyMatch(x -> x.getType()
+                    .equals(AppData.MESSAGE_TYPE));
         } catch (Exception e) {
             throw new Exception(e.getMessage() + "\nException in MessagesService in isSendMessage");
         }

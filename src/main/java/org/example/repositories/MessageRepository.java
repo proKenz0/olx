@@ -20,6 +20,15 @@ public class MessageRepository implements IMessageRepository {
     private static final String THREAD_COMMAND_END = "/commands";
     private static final String COMMAND_READ = "command=mark-as-read";
 
+    private static MessageRepository instance;
+
+    private MessageRepository(){}
+
+    public static MessageRepository getInstance(){
+        if(instance == null)
+            instance = new MessageRepository();
+        return instance;
+    }
 
     @Override
     public List<Message> getMessageList(String threadId, Map<String, String> headers) throws Exception {

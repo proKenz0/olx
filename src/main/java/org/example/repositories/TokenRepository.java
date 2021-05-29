@@ -18,6 +18,16 @@ import java.util.Scanner;
 public class TokenRepository implements ITokenRepository {
     private final String TOKEN_URL  = "https://www.olx.ua/api/open/oauth/token";
 
+    private static TokenRepository instance;
+
+    private TokenRepository(){}
+
+    public static TokenRepository getInstance(){
+        if(instance == null)
+            instance = new TokenRepository();
+        return instance;
+    }
+
     @Override
     public Token getToken(String refreshToken) throws IOException {
         try {
